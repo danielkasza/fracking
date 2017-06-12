@@ -29,7 +29,9 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(image)
 
     def do_GET(self):
-        if self.path.startswith("/julia/") and not self.path.endswith(".jpg"):
+        if self.path == "/":
+            self.do_STATIC("index.html", "text/html")
+        elif self.path.startswith("/julia/") and not self.path.endswith(".jpg"):
             self.do_STATIC("julia.html", "text/html")
         elif self.path == "/burningship":
             self.do_STATIC("burningship.html", "text/html")
