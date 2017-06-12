@@ -65,7 +65,7 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path.startswith("/mandelbrot/"):
             self.do_GENERIC_FRACTAL("mandelbrot", -2)
         elif self.path.startswith("/collatz/"):
-            self.do_GENERIC_FRACTAL("collatz", -2)
+            self.do_GENERIC_FRACTAL("collatz", -4)
         else:
             self.send_response(404)
             self.send_header('Content-type', "text/html")
