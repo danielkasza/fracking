@@ -28,10 +28,10 @@ int main(int argc, char *argv[]) {
     const double complex location = atof(argv[1]) + atof(argv[2])*I;
     const double width = atof(argv[3]);
     const double step_size = width / TILE_SIZE;
-    int32_t y;
+    uint32_t y;
     for (y=0; y<TILE_SIZE; y++) {
         uint8_t row[TILE_SIZE];
-        int32_t x;
+        uint32_t x;
         for (x=0; x<TILE_SIZE; x++) {
             double complex c = location + x*step_size + y*step_size*I;
             row[x] = collatz(c);

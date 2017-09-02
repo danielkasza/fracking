@@ -28,10 +28,10 @@ int main(int argc, char *argv[]) {
     const double complex location = atof(argv[3]) + atof(argv[4])*I;
     const double width = atof(argv[5]);
     const double step_size = width / TILE_SIZE;
-    int32_t y;
+    uint32_t y;
     for (y=0; y<TILE_SIZE; y++) {
         uint8_t row[TILE_SIZE];
-        int32_t x;
+        uint32_t x;
         for (x=0; x<TILE_SIZE; x++) {
             double complex z = location + x*step_size + y*step_size*I;
             row[x] = julia(z, c);
