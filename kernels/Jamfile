@@ -1,5 +1,5 @@
 CCFLAGS += -O3 -ffast-math ;
-CCFLAGS += -mavx ;
+CCFLAGS += -msse4.2 ;
 LINKLIBS += -lm ;
 
 Main julia : julia.c ;
