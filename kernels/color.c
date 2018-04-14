@@ -16,7 +16,6 @@ static void panic(const char* msg) {
 }
 
 static void set_color(unsigned point, double color[3]) {
-    fprintf(stderr, "%f,%f,%f\n", color[0], color[1], color[2]);
     int16_t r = 255*color[0]; r = (r>255) ? 255:r; r = (r<0) ? 0:r;
     int16_t g = 255*color[1]; g = (g>255) ? 255:g; g = (g<0) ? 0:g;
     int16_t b = 255*color[2]; b = (b>255) ? 255:b; b = (b<0) ? 0:b;
@@ -24,8 +23,6 @@ static void set_color(unsigned point, double color[3]) {
     colors_r[point] = r;
     colors_g[point] = g;
     colors_b[point] = b;
-
-    fprintf(stderr, "colors[%u] = %hx,%hx,%hx\n", point, r,g,b);
 }
 
 int main(int argc, char *argv[]) {
@@ -42,8 +39,6 @@ int main(int argc, char *argv[]) {
         if (sscanf(s, "%u+%" SCNx32, &point, &color) != 2) {
             panic("Bad argument.");
         }
-
-        fprintf(stderr, "last=%d, point=%u, color=%x\n", last, point, color);
 
         if (point > 255) {
             panic("point must be less than 256");
