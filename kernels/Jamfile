@@ -6,3 +6,4 @@ Main julia : julia.c ;
 Main burningship : burningship.c ;
 Main mandelbrot : mandelbrot.c ;
 Main collatz : collatz.c ;
+Main color : color.c ;

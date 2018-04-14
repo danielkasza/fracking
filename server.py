@@ -3,6 +3,8 @@ from SocketServer import ThreadingMixIn
 import threading
 import subprocess
 
+colorstring = "0+000000,255+FFFFFF"
+
 class Handler(BaseHTTPRequestHandler):
     def do_STATIC(self, filename, mime):
         f = open("static/" + filename)
@@ -15,22 +17,29 @@ class Handler(BaseHTTPRequestHandler):
 
     # This works for everything except Julia sets.
     def do_GENERIC_FRACTAL(self, kernel, x_min):
+        global colorstring
         tile_descriptor_string = self.path.split("/")[-1]
         (x, y, z) = [t(s) for t,s in zip((int,int,int), tile_descriptor_string.split("."))]
         width = 4.0/pow(2, min(z, 36))
         x = x_min + x*width
         y = -2 + y*width
-        command = "./kernels/{0} {1} {2} {3} | convert -depth 8 -size 512x512 gray:- -depth 8 jpg:-".format(kernel, x,y,width)
+        command = "./kernels/{0} {1} {2} {3} | ./kernels/color {4} | convert - jpg:-".format(kernel, x,y,width, colorstring)
         image = subprocess.check_output(command, shell=True)
         self.send_response(200)
         self.send_header('Content-type', "image/jpg")
-        self.send_header("Cache-Control", "public, max-age=2592000")
+        self.send_header("Cache-Control", "public, max-age=0")
         self.end_headers()
         self.wfile.write(image)
 
     def do_GET(self):
+        global colorstring
         if self.path == "/":
             self.do_STATIC("index.html", "text/html")
+        elif self.path.startswith("/setcolor/"):
+            colorstring = self.path.split("/")[-1]
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(colorstring)
         elif self.path.startswith("/julia/") and not self.path.endswith(".jpg"):
             self.do_STATIC("julia.html", "text/html")
         elif self.path == "/burningship" or self.path == "/burningship/":
@@ -53,11 +62,11 @@ class Handler(BaseHTTPRequestHandler):
             width = 4.0/pow(2, min(z, 36))
             x = -2 + x*width
             y = -2 + y*width
-            command = "./kernels/julia {0} {1} {2} {3} {4} | convert -depth 8 -size 512x512 gray:- -depth 8 jpg:-".format(cr,ci,x,y,width)
+            command = "./kernels/julia {0} {1} {2} {3} {4} | ./kernels/color {5} | convert - jpg:-".format(cr,ci,x,y,width, colorstring)
             image = subprocess.check_output(command, shell=True)
             self.send_response(200)
             self.send_header('Content-type', "image/jpg")
-            self.send_header("Cache-Control", "public, max-age=2592000")
+            self.send_header("Cache-Control", "public, max-age=0")
             self.end_headers()
             self.wfile.write(image)
         elif self.path.startswith("/burningship/"):
